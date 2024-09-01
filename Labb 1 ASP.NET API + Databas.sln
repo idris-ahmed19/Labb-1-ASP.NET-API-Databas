@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Labb 1 ASP.NET API + Databas", "Labb 1 ASP.NET API + Databas.csproj", "{7F958FE8-2A7B-40F8-92EC-F0157CDB20BE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7F958FE8-2A7B-40F8-92EC-F0157CDB20BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F958FE8-2A7B-40F8-92EC-F0157CDB20BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F958FE8-2A7B-40F8-92EC-F0157CDB20BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F958FE8-2A7B-40F8-92EC-F0157CDB20BE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3BE25E99-DE0B-4055-A395-5B5674E10A7A}
+	EndGlobalSection
+EndGlobal
