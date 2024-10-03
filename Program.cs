@@ -26,10 +26,19 @@ namespace Labb_1_ASP.NET_API___Databas
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddScoped<ITableRepository, TableRepository>();
-            builder.Services.AddScoped<ITableService, TableService>();
+			builder.Services.AddScoped<ICustomerService, CustomerService>();
+			builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
-            var app = builder.Build();
+			builder.Services.AddScoped<ITableService, TableService>();
+			builder.Services.AddScoped<ITableRepository, TableRepository>();
+
+			//builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+			//builder.Services.AddScoped<IBookingService, BookingService>();
+
+			builder.Services.AddScoped<IMenuItemService, MenuItemService>();
+			builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+
+			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

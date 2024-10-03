@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Labb_1_ASP.NET_API___Databas.Migrations
 {
     [DbContext(typeof(RestaurantContext))]
-    [Migration("20240901190900_init")]
+    [Migration("20241003154433_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -33,11 +33,15 @@ namespace Labb_1_ASP.NET_API___Databas.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ContactInfo")
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -66,7 +70,7 @@ namespace Labb_1_ASP.NET_API___Databas.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MenuItem");
+                    b.ToTable("MenuItems");
                 });
 
             modelBuilder.Entity("Labb_1_ASP.NET_API___Databas.Models.Reservation", b =>
@@ -83,11 +87,14 @@ namespace Labb_1_ASP.NET_API___Databas.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("NumberOfCustomers")
+                    b.Property<int>("NumberOfPeople")
                         .HasColumnType("int");
 
                     b.Property<int>("TableId")
                         .HasColumnType("int");
+
+                    b.Property<TimeSpan>("Time")
+                        .HasColumnType("time");
 
                     b.HasKey("Id");
 

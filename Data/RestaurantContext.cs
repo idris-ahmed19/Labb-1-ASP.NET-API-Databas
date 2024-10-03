@@ -3,28 +3,37 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Labb_1_ASP.NET_API___Databas.Data
 {
-    public class RestaurantContext : DbContext
-    {
-        public RestaurantContext(DbContextOptions<RestaurantContext> options) : base(options)
-        {
-        }
+	public class RestaurantContext : DbContext
+	{
+		// DbSet properties for your entities
+		public DbSet<Table> Tables { get; set; }
+		public DbSet<Customer> Customers { get; set; }
+		//public DbSet<Booking> Bookings { get; set; }
+		public DbSet<MenuItem> MenuItems { get; set; } // Assuming you have a MenuItem entity
 
-        public DbSet<Table> Tables { get; set; }
-        public DbSet<Customer> Customers { get; set; }
-        public DbSet<Reservation> Reservations { get; set; }
-        public DbSet<MenuItem> MenuItem { get; set; }
+		public RestaurantContext(DbContextOptions<RestaurantContext> options) : base(options)
+		{
+		}
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Reservation>()
-                .HasOne(r => r.Table)
-                .WithMany()
-                .HasForeignKey(r => r.TableId);
+		//Optionally, you can override OnModelCreating to configure the model
+		//protected override void OnModelCreating(ModelBuilder modelBuilder)
+		//{
+		//	base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Reservation>()
-                .HasOne(r => r.Customer)
-                .WithMany()
-                .HasForeignKey(r => r.CustomerId);
-        }
-    }
+		//	// Example: configuring entity relationships, if needed
+		//	modelBuilder.Entity<Bookings>()
+		//		.HasOne(r => r.Table)
+		//		.WithMany()
+		//		.HasForeignKey(r => r.TableId)
+		//		.OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes if needed
+
+		//	modelBuilder.Entity<Bookings>()
+		//		.HasOne(r => r.Customer)
+		//		.WithMany()
+		//		.HasForeignKey(r => r.CustomerId)
+		//		.OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes if needed
+
+		//	// Additional configurations can be done here
+		//}
+	}
 }

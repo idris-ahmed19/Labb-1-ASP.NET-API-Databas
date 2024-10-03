@@ -18,7 +18,8 @@ namespace Labb_1_ASP.NET_API___Databas.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ContactInfo = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -26,7 +27,7 @@ namespace Labb_1_ASP.NET_API___Databas.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MenuItem",
+                name: "MenuItems",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -37,7 +38,7 @@ namespace Labb_1_ASP.NET_API___Databas.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MenuItem", x => x.Id);
+                    table.PrimaryKey("PK_MenuItems", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -61,7 +62,8 @@ namespace Labb_1_ASP.NET_API___Databas.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    NumberOfCustomers = table.Column<int>(type: "int", nullable: false),
+                    Time = table.Column<TimeSpan>(type: "time", nullable: false),
+                    NumberOfPeople = table.Column<int>(type: "int", nullable: false),
                     TableId = table.Column<int>(type: "int", nullable: false),
                     CustomerId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -97,7 +99,7 @@ namespace Labb_1_ASP.NET_API___Databas.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "MenuItem");
+                name: "MenuItems");
 
             migrationBuilder.DropTable(
                 name: "Reservations");

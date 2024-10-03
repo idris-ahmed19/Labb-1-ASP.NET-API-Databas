@@ -8,6 +8,5 @@ namespace Labb_1_ASP.NET_API___Databas.Services.IServices
         Task<Table> GetTableByIdAsync(int id);
         Task<Table> AddTableAsync(Table table);
         Task<bool> UpdateTableAsync(Table table);
-        Task<bool> DeleteTableAsync(int id);
-    }
+        Task<bool> DeleteTableAsync(int id);	}
 }
