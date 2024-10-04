@@ -32,11 +32,11 @@ namespace Labb_1_ASP.NET_API___Databas
 			builder.Services.AddScoped<ITableService, TableService>();
 			builder.Services.AddScoped<ITableRepository, TableRepository>();
 
-			//builder.Services.AddScoped<IBookingRepository, BookingRepository>();
-			//builder.Services.AddScoped<IBookingService, BookingService>();
+            builder.Services.AddScoped<IBookingService, BookingService>();
+            builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
-			builder.Services.AddScoped<IMenuItemService, MenuItemService>();
-			builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+            builder.Services.AddScoped<IMenuService, MenuService>();
+			builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 
 			var app = builder.Build();
 

@@ -22,6 +22,35 @@ namespace Labb_1_ASP.NET_API___Databas.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Labb_1_ASP.NET_API___Databas.Models.Booking", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("BookingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CustomerAmount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FK_CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FK_TableId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FK_CustomerId");
+
+                    b.HasIndex("FK_TableId");
+
+                    b.ToTable("Bookings");
+                });
+
             modelBuilder.Entity("Labb_1_ASP.NET_API___Databas.Models.Customer", b =>
                 {
                     b.Property<int>("Id")
@@ -38,16 +67,12 @@ namespace Labb_1_ASP.NET_API___Databas.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("Labb_1_ASP.NET_API___Databas.Models.MenuItem", b =>
+            modelBuilder.Entity("Labb_1_ASP.NET_API___Databas.Models.Menu", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -55,10 +80,10 @@ namespace Labb_1_ASP.NET_API___Databas.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("IsAvailable")
+                    b.Property<bool>("Availability")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("DishName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -67,39 +92,7 @@ namespace Labb_1_ASP.NET_API___Databas.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MenuItems");
-                });
-
-            modelBuilder.Entity("Labb_1_ASP.NET_API___Databas.Models.Reservation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("NumberOfPeople")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TableId")
-                        .HasColumnType("int");
-
-                    b.Property<TimeSpan>("Time")
-                        .HasColumnType("time");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("TableId");
-
-                    b.ToTable("Reservations");
+                    b.ToTable("Menus");
                 });
 
             modelBuilder.Entity("Labb_1_ASP.NET_API___Databas.Models.Table", b =>
@@ -110,10 +103,10 @@ namespace Labb_1_ASP.NET_API___Databas.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Number")
+                    b.Property<int>("Capacity")
                         .HasColumnType("int");
 
-                    b.Property<int>("Seats")
+                    b.Property<int>("TableNumber")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -121,23 +114,33 @@ namespace Labb_1_ASP.NET_API___Databas.Migrations
                     b.ToTable("Tables");
                 });
 
-            modelBuilder.Entity("Labb_1_ASP.NET_API___Databas.Models.Reservation", b =>
+            modelBuilder.Entity("Labb_1_ASP.NET_API___Databas.Models.Booking", b =>
                 {
                     b.HasOne("Labb_1_ASP.NET_API___Databas.Models.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
+                        .WithMany("Bookings")
+                        .HasForeignKey("FK_CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Labb_1_ASP.NET_API___Databas.Models.Table", "Table")
-                        .WithMany()
-                        .HasForeignKey("TableId")
+                        .WithMany("Bookings")
+                        .HasForeignKey("FK_TableId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Customer");
 
                     b.Navigation("Table");
+                });
+
+            modelBuilder.Entity("Labb_1_ASP.NET_API___Databas.Models.Customer", b =>
+                {
+                    b.Navigation("Bookings");
+                });
+
+            modelBuilder.Entity("Labb_1_ASP.NET_API___Databas.Models.Table", b =>
+                {
+                    b.Navigation("Bookings");
                 });
 #pragma warning restore 612, 618
         }

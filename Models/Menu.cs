@@ -2,15 +2,16 @@
 
 namespace Labb_1_ASP.NET_API___Databas.Models
 {
-	public class Table
+	public class Menu
 	{
 		[Key]
 		public int Id { get; set; }
 		[Required]
-		public int TableNumber { get; set; }
+		public string DishName { get; set; }
 		[Required]
-		public int Capacity { get; set; }
+		public int Price { get; set; }
+		[Required]
+		public bool Availability { get; set; }
 
-		public ICollection<Booking> Bookings { get; set; }
 	}
 }

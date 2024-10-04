@@ -1,4 +1,6 @@
 ﻿using Labb_1_ASP.NET_API___Databas.Models;
+using Labb_1_ASP.NET_API___Databas.Models.DTOs;
+using Labb_1_ASP.NET_API___Databas.Services;
 using Labb_1_ASP.NET_API___Databas.Services.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,69 +11,46 @@ namespace Labb_1_ASP.NET_API___Databas.Controllers
 	[ApiController]
 	public class CustomerController : ControllerBase
 	{
-		private readonly ICustomerService _customerService;
+		private readonly ICustomerService _customerServices;
 
-		public CustomerController(ICustomerService customerService)
+		public CustomerController(ICustomerService customerServices)
 		{
-			_customerService = customerService;
+			_customerServices = customerServices;
 		}
 
-		// GET: api/customer
-		[HttpGet]
-		public async Task<ActionResult<List<Customer>>> GetAllCustomers()
+		[HttpGet("GetAllCustomers")]
+		public async Task<IActionResult> GetAllCustomers()
 		{
-			var customers = await _customerService.GetAllCustomersAsync();
+			var customers = await _customerServices.GetAllCustomersAsync();
 			return Ok(customers);
 		}
 
-		// GET: api/customer/{id}
-		[HttpGet("{id}")]
-		public async Task<ActionResult<Customer>> GetCustomer(int id)
+		[HttpGet("GetCustomerById")]
+		public async Task<IActionResult> GetCustomerById(int id)
 		{
-			var customer = await _customerService.GetCustomerByIdAsync(id);
-			if (customer == null)
-			{
-				return NotFound();
-			}
+			var customer = await _customerServices.GetCustomerByIdAsync(id);
+			if (customer == null) return NotFound();
 			return Ok(customer);
 		}
 
-		// POST: api/customer
-		[HttpPost]
-		public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
+		[HttpPost("AddCustomer")]
+		public async Task<IActionResult> AddCustomer([FromBody] CustomerDTO customer)
 		{
-			var createdCustomer = await _customerService.AddCustomerAsync(customer);
-			return CreatedAtAction(nameof(GetCustomer), new { id = createdCustomer.Id }, createdCustomer);
+			await _customerServices.AddCustomerAsync(customer);
+			return CreatedAtAction(nameof(GetCustomerById), new { id = customer.CustomerId }, customer);
 		}
 
-		// PUT: api/customer/{id}
-		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateCustomer(int id, Customer customer)
+		[HttpPut("UpdateCustomer")]
+		public async Task<IActionResult> UpdateCustomer(int id, [FromBody] CustomerDTO customer)
 		{
-			if (id != customer.Id)
-			{
-				return BadRequest();
-			}
-
-			var updated = await _customerService.UpdateCustomerAsync(customer);
-			if (!updated)
-			{
-				return NotFound();
-			}
-
+			await _customerServices.UpdateCustomerAsync(customer, id);
 			return NoContent();
 		}
 
-		// DELETE: api/customer/{id}
-		[HttpDelete("{id}")]
+		[HttpDelete("DeleteCustomer")]
 		public async Task<IActionResult> DeleteCustomer(int id)
 		{
-			var deleted = await _customerService.DeleteCustomerAsync(id);
-			if (!deleted)
-			{
-				return NotFound();
-			}
-
+			await _customerServices.DeleteCustomerAsync(id);
 			return NoContent();
 		}
 	}

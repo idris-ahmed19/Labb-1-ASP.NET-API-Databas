@@ -4,10 +4,11 @@ namespace Labb_1_ASP.NET_API___Databas.Data.Repos.IRepos
 {
 	public interface ICustomerRepository
 	{
-		Task<IEnumerable<Customer>> GetAllAsync();
-		Task<Customer> GetByIdAsync(int id);
-		Task<Customer> AddAsync(Customer customer);
-		Task<bool> UpdateAsync(Customer customer);
-		Task<bool> DeleteAsync(int id);
+		Task<IEnumerable<Customer>> GetAllCustomersAsync();
+		Task<Customer> GetCustomerByIdAsync(int customerId);
+
+		Task AddCustomerAsync(Customer customer);
+		Task UpdateCustomerAsync(Customer customer);
+		Task DeleteCustomerAsync(int customerId);
 	}
 }

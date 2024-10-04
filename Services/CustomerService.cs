@@ -1,5 +1,7 @@
 ﻿using Labb_1_ASP.NET_API___Databas.Data;
+using Labb_1_ASP.NET_API___Databas.Data.Repos.IRepos;
 using Labb_1_ASP.NET_API___Databas.Models;
+using Labb_1_ASP.NET_API___Databas.Models.DTOs;
 using Labb_1_ASP.NET_API___Databas.Services.IServices;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,52 +9,62 @@ namespace Labb_1_ASP.NET_API___Databas.Services
 {
 	public class CustomerService : ICustomerService
 	{
-		private readonly RestaurantContext _context;
-
-		public CustomerService(RestaurantContext context)
+		private readonly ICustomerRepository _customerRepository;
+		public CustomerService(ICustomerRepository customerRepository)
 		{
-			_context = context;
+			_customerRepository = customerRepository;
+		}
+		public async Task AddCustomerAsync(CustomerDTO customer)
+		{
+			var newCustomer = new Customer
+			{
+				Name = customer.Name,
+				Email = customer.Email
+			};
+			await _customerRepository.AddCustomerAsync(newCustomer);
 		}
 
-		public async Task<IEnumerable<Customer>> GetAllCustomersAsync()
+		public async Task DeleteCustomerAsync(int customerId)
 		{
-			return await _context.Customers.ToListAsync();
+			await _customerRepository.DeleteCustomerAsync(customerId);
 		}
 
-		public async Task<Customer> GetCustomerByIdAsync(int id)
+		public async Task<IEnumerable<CustomerDTO>> GetAllCustomersAsync()
 		{
-			return await _context.Customers.FindAsync(id);
+			var listOfCustomers = await _customerRepository.GetAllCustomersAsync();
+			return listOfCustomers.Select(x => new CustomerDTO
+			{
+				CustomerId = x.Id,
+				Name = x.Name,
+				Email = x.Email
+
+			}).ToList();
 		}
 
-		public async Task<Customer> AddCustomerAsync(Customer customer)
+		public async Task<CustomerDTO> GetCustomerByIdAsync(int customerId)
 		{
-			_context.Customers.Add(customer);
-			await _context.SaveChangesAsync();
-			return customer;
+			var customerGot = await _customerRepository.GetCustomerByIdAsync(customerId);
+			if (customerGot == null)
+			{
+				return null;
+			}
+
+			return new CustomerDTO
+			{
+				CustomerId = customerGot.Id,
+				Name = customerGot.Name,
+				Email = customerGot.Email
+
+			};
 		}
 
-		public async Task<bool> UpdateCustomerAsync(Customer customer)
+		public async Task UpdateCustomerAsync(CustomerDTO customer, int customerId)
 		{
-			var existingCustomer = await _context.Customers.FindAsync(customer.Id);
-			if (existingCustomer == null) return false;
+			var updateCustomer = await _customerRepository.GetCustomerByIdAsync(customerId);
 
-			existingCustomer.Name = customer.Name;
-			existingCustomer.Email = customer.Email;
-			existingCustomer.Phone = customer.Phone;
-
-			_context.Customers.Update(existingCustomer);
-			await _context.SaveChangesAsync();
-			return true;
-		}
-
-		public async Task<bool> DeleteCustomerAsync(int id)
-		{
-			var customer = await _context.Customers.FindAsync(id);
-			if (customer == null) return false;
-
-			_context.Customers.Remove(customer);
-			await _context.SaveChangesAsync();
-			return true;
+			updateCustomer.Name = customer.Name;
+			updateCustomer.Email = customer.Email;
+			await _customerRepository.UpdateCustomerAsync(updateCustomer);
 		}
 	}
 }

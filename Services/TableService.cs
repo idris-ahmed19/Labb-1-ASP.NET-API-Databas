@@ -1,57 +1,77 @@
 ﻿using Labb_1_ASP.NET_API___Databas.Data;
+using Labb_1_ASP.NET_API___Databas.Data.Repos.IRepos;
 using Labb_1_ASP.NET_API___Databas.Models;
+using Labb_1_ASP.NET_API___Databas.Models.DTOs;
 using Labb_1_ASP.NET_API___Databas.Services.IServices;
 using Microsoft.EntityFrameworkCore;
 
 namespace Labb_1_ASP.NET_API___Databas.Services
 {
-    public class TableService : ITableService
-    {
-        private readonly RestaurantContext _context;
+	public class TableService : ITableService
+	{
+		private readonly ITableRepository _tableRepository;
+		public TableService(ITableRepository tableRepository)
+		{
+			_tableRepository = tableRepository;
+		}
+		public async Task AddTableAsync(TableDTO table)
+		{
 
-        public TableService(RestaurantContext context)
-        {
-            _context = context;
-        }
+			if (await _tableRepository.IsTableNumberExistsAsync(table.TableNumber))
+			{
+				throw new InvalidOperationException($"Table number {table.TableNumber} already exists.");
+			}
 
-        public async Task<IEnumerable<Table>> GetAllTablesAsync()
-        {
-            return await _context.Tables.ToListAsync();
-        }
+			var newTable = new Models.Table
+			{
+				TableNumber = table.TableNumber,
+				Capacity = table.Capacity
+			};
+			await _tableRepository.AddTableAsync(newTable);
+		}
 
-        public async Task<Table> GetTableByIdAsync(int id)
-        {
-            return await _context.Tables.FindAsync(id);
-        }
+		public async Task DeleteTableAsync(int tableId)
+		{
+			await _tableRepository.DeleteTableAsync(tableId);
+		}
 
-        public async Task<Table> AddTableAsync(Table table)
-        {
-            _context.Tables.Add(table);
-            await _context.SaveChangesAsync();
-            return table;
-        }
+		public async Task<IEnumerable<TableDTO>> GetAllTablesAsync()
+		{
+			var listOfTables = await _tableRepository.GetAllTablesAsync();
+			return listOfTables.Select(x => new TableDTO
+			{
+				TableId = x.Id,
+				TableNumber = x.TableNumber,
+				Capacity = x.Capacity,
+			}).ToList();
+		}
 
-        public async Task<bool> UpdateTableAsync(Table table)
-        {
-            var existingTable = await _context.Tables.FindAsync(table.Id);
-            if (existingTable == null) return false;
+		public async Task<TableDTO> GetTableByIdAsync(int tableId)
+		{
+			var tableGot = await _tableRepository.GetTableByIdAsync(tableId);
+			if (tableGot == null)
+			{
+				return null;
+			}
 
-            existingTable.Number = table.Number;
-            existingTable.Seats = table.Seats;
+			return new TableDTO
+			{
+				TableId = tableId,
+				TableNumber = tableGot.TableNumber,
+				Capacity = tableGot.Capacity
+			};
+		}
 
-            _context.Tables.Update(existingTable);
-            await _context.SaveChangesAsync();
-            return true;
-        }
+		public async Task UpdateTableAsync(TableDTO table, int tableId)
+		{
 
-        public async Task<bool> DeleteTableAsync(int id)
-        {
-            var table = await _context.Tables.FindAsync(id);
-            if (table == null) return false;
+			var updateTable = await _tableRepository.GetTableByIdAsync(tableId);
 
-            _context.Tables.Remove(table);
-            await _context.SaveChangesAsync();
-            return true;
-        }
-    }
+			updateTable.TableNumber = table.TableNumber;
+			updateTable.Capacity = table.Capacity;
+			await _tableRepository.UpdateTableAsync(updateTable);
+		}
+
+
+	}
 }
